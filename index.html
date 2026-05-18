@@ -3,67 +3,678 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Website</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono&display=swap');
+  <title>lenslesspictures</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet" />
 
+  <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --bg:        #f4f2ee;
+      --surface:   #edeae4;
+      --border:    #d8d3c9;
+      --text:      #1a1814;
+      --muted:     #7a756c;
+      --accent:    #2b2825;
+      --hover-lift: rgba(0,0,0,0.06);
+    }
+
+    html { scroll-behavior: smooth; }
+
     body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      letter-spacing: 0.03em;
       min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 0 3rem;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(8px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .logo-wrap {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #0a0a0a;
-      background-image:
-        repeating-linear-gradient(0deg, transparent, transparent 39px, #1a1a1a 39px, #1a1a1a 40px),
-        repeating-linear-gradient(90deg, transparent, transparent 39px, #1a1a1a 39px, #1a1a1a 40px);
-      font-family: 'Space Mono', monospace;
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+
+    /* Replace src with your actual logo file */
+    .logo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Fallback placeholder shown when no img is loaded */
+    .logo-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      color: var(--muted);
+    }
+
+    .wordmark {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: 1.4rem;
+      letter-spacing: 0.12em;
+      text-transform: lowercase;
+    }
+
+    nav {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--text); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 6rem 3rem 4rem;
+      max-width: 820px;
+    }
+
+    .hero-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      line-height: 1.15;
+      letter-spacing: 0.02em;
+      color: var(--text);
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    /* ── SECTION LABEL ── */
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1.5rem;
+      padding: 4rem 3rem 2rem;
+    }
+
+    .section-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: 1.6rem;
+      letter-spacing: 0.04em;
+    }
+
+    .section-header .tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 0.2rem 0.7rem;
+      border-radius: 20px;
+    }
+
+    /* ── GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      padding: 0 3rem;
+    }
+
+    .card {
+      position: relative;
+      aspect-ratio: 4/5;
+      background: var(--surface);
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    /* The placeholder shimmer */
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        135deg,
+        var(--surface) 0%,
+        var(--border) 50%,
+        var(--surface) 100%
+      );
+      background-size: 200% 200%;
+      animation: shimmer 3s ease infinite;
+    }
+
+    @keyframes shimmer {
+      0%   { background-position: 0% 0%; }
+      50%  { background-position: 100% 100%; }
+      100% { background-position: 0% 0%; }
+    }
+
+    /* When an actual <img> is inside, it covers the shimmer */
+    .card img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* Overlay with meta */
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background: linear-gradient(to top, rgba(20,18,16,0.72) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.4rem;
+    }
+
+    .card:hover .card-overlay { opacity: 1; }
+    .card:hover img { transform: scale(1.04); }
+
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: 1.1rem;
+      color: #fff;
+      letter-spacing: 0.05em;
+      transform: translateY(6px);
+      transition: transform 0.35s ease;
+    }
+
+    .card-sub {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      margin-top: 0.25rem;
+      transform: translateY(6px);
+      transition: transform 0.35s 0.04s ease;
+    }
+
+    .card:hover .card-title,
+    .card:hover .card-sub {
+      transform: translateY(0);
+    }
+
+    /* Placeholder label (visible only without img) */
+    .card-placeholder-label {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      pointer-events: none;
+    }
+
+    .card-placeholder-label span {
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .card-placeholder-label svg {
+      opacity: 0.3;
+      width: 28px;
+      height: 28px;
+    }
+
+    /* ── FEATURED (wide card) ── */
+    .grid.featured {
+      grid-template-columns: 2fr 1fr;
+      margin-bottom: 1.5px;
+    }
+
+    .grid.featured .card:first-child {
+      aspect-ratio: 16/10;
+    }
+
+    .grid.featured .card:last-child {
+      aspect-ratio: unset;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      margin: 5rem 3rem 0;
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── PROJECTS ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      padding: 0 3rem;
+    }
+
+    .project-card {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      cursor: pointer;
+    }
+
+    .project-thumb {
+      aspect-ratio: 3/2;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      position: relative;
       overflow: hidden;
     }
 
-    .container {
-      text-align: center;
-      animation: fadeIn 1s ease forwards;
+    .project-thumb::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--surface), var(--border), var(--surface));
+      background-size: 200% 200%;
+      animation: shimmer 3s ease infinite;
     }
 
-    h1 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3rem, 12vw, 10rem);
-      color: #f0f0f0;
+    .project-thumb img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+      transition: transform 0.5s ease;
+    }
+
+    .project-card:hover .project-thumb img { transform: scale(1.05); }
+
+    .project-thumb .project-placeholder {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .project-placeholder svg { opacity: 0.25; width: 32px; height: 32px; }
+
+    .project-meta {}
+
+    .project-meta h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 1.05rem;
       letter-spacing: 0.04em;
-      line-height: 1;
-      text-shadow: 4px 4px 0px #ff3c3c, 8px 8px 0px rgba(255,60,60,0.2);
-      animation: glitch 4s infinite;
     }
 
-    .sub {
-      margin-top: 1.5rem;
-      font-size: clamp(0.75rem, 2vw, 1rem);
-      color: #ff3c3c;
-      letter-spacing: 0.3em;
+    .project-meta p {
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      margin-top: 0.25rem;
+    }
+
+    .project-arrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.3rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: gap 0.2s, color 0.2s;
+    }
+
+    .project-card:hover .project-arrow {
+      gap: 0.8rem;
+      color: var(--text);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-top: 8rem;
+      border-top: 1px solid var(--border);
+      padding: 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer .wordmark {
+      font-size: 1.1rem;
+    }
+
+    footer p {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    footer .contact-link {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px;
+      transition: border-color 0.2s;
+    }
+
+    footer .contact-link:hover { border-color: var(--text); }
+
+    /* ── FADE-IN ON SCROLL ── */
+    .reveal {
       opacity: 0;
-      animation: fadeIn 0.8s ease 0.6s forwards;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    @keyframes glitch {
-      0%, 92%, 100% { text-shadow: 4px 4px 0px #ff3c3c, 8px 8px 0px rgba(255,60,60,0.2); }
-      93%            { text-shadow: -4px 4px 0px #3cffef, 8px -4px 0px #ff3c3c; }
-      94%            { text-shadow: 4px -4px 0px #ff3c3c, -8px 4px 0px #3cffef; }
-      95%            { text-shadow: 4px 4px 0px #ff3c3c, 8px 8px 0px rgba(255,60,60,0.2); }
+    /* stagger children */
+    .reveal-group > * {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal-group.visible > *:nth-child(1) { opacity:1; transform:none; transition-delay:0s; }
+    .reveal-group.visible > *:nth-child(2) { opacity:1; transform:none; transition-delay:0.1s; }
+    .reveal-group.visible > *:nth-child(3) { opacity:1; transform:none; transition-delay:0.2s; }
+    .reveal-group.visible > *:nth-child(4) { opacity:1; transform:none; transition-delay:0.3s; }
+    .reveal-group.visible > *:nth-child(5) { opacity:1; transform:none; transition-delay:0.4s; }
+    .reveal-group.visible > *:nth-child(6) { opacity:1; transform:none; transition-delay:0.5s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .grid, .projects-grid { grid-template-columns: repeat(2, 1fr); }
+      .grid.featured { grid-template-columns: 1fr; }
+      header { padding: 0 1.5rem; }
+      .hero, .section-header, .grid, .projects-grid, .divider { padding-left: 1.5rem; padding-right: 1.5rem; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; gap: 1rem; text-align: center; }
+    }
+
+    @media (max-width: 600px) {
+      .grid, .projects-grid { grid-template-columns: 1fr; }
+      nav { display: none; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>HELLO WORLD!<br>IM A WEBSITE</h1>
-    <p class="sub">● online and ready ●</p>
-  </div>
+
+  <!-- ══ HEADER ══ -->
+  <header>
+    <a href="#" class="brand">
+      <div class="logo-wrap">
+        <!--
+          LOGO: Replace the placeholder below with your actual logo.
+          Option A — use an image file:
+            <img src="logo.png" alt="lenslesspictures logo" />
+          Option B — keep the letter placeholder until your logo is ready.
+        -->
+        <div class="logo-placeholder">◎</div>
+      </div>
+      <span class="wordmark">lenslesspictures</span>
+    </a>
+    <nav>
+      <a href="#work">Work</a>
+      <a href="#projects">Projects</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- ══ HERO ══ -->
+  <section class="hero reveal">
+    <p class="hero-label">Visual storytelling &amp; photography</p>
+    <h1>Images that<br/><em>speak before</em><br/>words do.</h1>
+  </section>
+
+  <!-- ══ WORK SECTION ══ -->
+  <section id="work">
+    <div class="section-header reveal">
+      <h2>Selected Work</h2>
+      <span class="tag">Photography</span>
+    </div>
+
+    <!-- Featured row: 2-up -->
+    <div class="grid featured reveal-group">
+      <div class="card">
+        <!--
+          ADD YOUR PHOTO:
+          <img src="photos/featured-1.jpg" alt="Description" />
+        -->
+        <div class="card-placeholder-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Your photo here</span>
+        </div>
+        <div class="card-overlay">
+          <p class="card-title">Untitled Series I</p>
+          <p class="card-sub">2025 · Featured</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-placeholder-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Your photo here</span>
+        </div>
+        <div class="card-overlay">
+          <p class="card-title">Untitled Series II</p>
+          <p class="card-sub">2025 · Portrait</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Standard 3-col grid -->
+    <div class="grid reveal-group">
+      <div class="card">
+        <div class="card-placeholder-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Your photo here</span>
+        </div>
+        <div class="card-overlay">
+          <p class="card-title">Untitled III</p>
+          <p class="card-sub">2025 · Landscape</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-placeholder-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Your photo here</span>
+        </div>
+        <div class="card-overlay">
+          <p class="card-title">Untitled IV</p>
+          <p class="card-sub">2024 · Street</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-placeholder-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Your photo here</span>
+        </div>
+        <div class="card-overlay">
+          <p class="card-title">Untitled V</p>
+          <p class="card-sub">2024 · Editorial</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid reveal-group">
+      <div class="card">
+        <div class="card-placeholder-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Your photo here</span>
+        </div>
+        <div class="card-overlay">
+          <p class="card-title">Untitled VI</p>
+          <p class="card-sub">2024 · Architecture</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-placeholder-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Your photo here</span>
+        </div>
+        <div class="card-overlay">
+          <p class="card-title">Untitled VII</p>
+          <p class="card-sub">2024 · Conceptual</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-placeholder-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Your photo here</span>
+        </div>
+        <div class="card-overlay">
+          <p class="card-title">Untitled VIII</p>
+          <p class="card-sub">2024 · Still Life</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══ PROJECTS SECTION ══ -->
+  <section id="projects">
+    <div class="section-header reveal">
+      <h2>Projects</h2>
+      <span class="tag">Series &amp; Campaigns</span>
+    </div>
+
+    <div class="projects-grid reveal-group">
+
+      <div class="project-card">
+        <div class="project-thumb">
+          <!--
+            ADD YOUR COVER IMAGE:
+            <img src="projects/project-1-cover.jpg" alt="Project name" />
+          -->
+          <div class="project-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+        </div>
+        <div class="project-meta">
+          <h3>Project Title One</h3>
+          <p>Category · Year</p>
+          <span class="project-arrow">View project →</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb">
+          <div class="project-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+        </div>
+        <div class="project-meta">
+          <h3>Project Title Two</h3>
+          <p>Category · Year</p>
+          <span class="project-arrow">View project →</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb">
+          <div class="project-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+        </div>
+        <div class="project-meta">
+          <h3>Project Title Three</h3>
+          <p>Category · Year</p>
+          <span class="project-arrow">View project →</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer id="contact">
+    <span class="wordmark">lenslesspictures</span>
+    <p>© 2025 lenslesspictures. All rights reserved.</p>
+    <a href="mailto:hello@lenslesspictures.com" class="contact-link">hello@lenslesspictures.com</a>
+  </footer>
+
+  <!-- ══ SCROLL REVEAL ══ -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('.reveal, .reveal-group').forEach(el => observer.observe(el));
+  </script>
+
 </body>
 </html>
